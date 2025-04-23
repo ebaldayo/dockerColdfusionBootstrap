@@ -1,0 +1,18 @@
+services:
+    coldfusion:
+        container_name: coldfusion
+        image: adobecoldfusion/coldfusion:latest
+        ports:
+        - "8500:8500"
+        volumes:
+        - ./app:/app
+        env_file:
+        - coldfusion.env
+        healthcheck:
+           test: curl -f http://localhost:8500/ 
+           interval: 1m
+           timeout: 3s
+        networks:
+        - webnet
+networks:
+    webnet: 
