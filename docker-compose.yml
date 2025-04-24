@@ -14,5 +14,18 @@ services:
            timeout: 3s
         networks:
         - webnet
+
+    sqlserver:
+        container_name: sqlserver
+        image: mcr.microsoft.com/azure-sql-edge:latest
+        environment:
+        - ACCEPT_EULA=1
+        - MSSQL_SA_PASSWORD=saPassword123
+        ports:
+        - "1433:1433"
+        volumes:
+        - .sql_data:/var/opt/mssql
+        networks:
+        - webnet
 networks:
     webnet: 
