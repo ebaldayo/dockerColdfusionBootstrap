@@ -45,8 +45,8 @@
                             <td>#city#</td>
                             <td>#phonenumber# - #email#</td>
                             <td>
-                                <a href="company.cfm?id=#id#" class="btn btn-primary">Edit</a>
-                                <a href="company.cfm?id=#id#" class="btn btn-danger">Delete</a>
+                                <a href="company.cfm?id=#id#&action=edit" class="btn btn-primary">Edit</a>
+                                <a href="company.cfm?id=#id#&action=confirmdelete" class="btn btn-danger">Delete</a>
                             </td> 
                         </tr>
                         </cfloop>
