@@ -1,4 +1,6 @@
-<cfparam  name="id" default="#URL.id#">
+<cfset action = cgi.request_method />
+<cfparam name="id" default="#URL.id#">
+
 
 <cfif not isnumeric(id) or id EQ 0>
   <cfset id = 0>
@@ -34,50 +36,25 @@
            <h2>#name#</h2>
           <p>Details</p>
 
-          <div class="card mt-4">
-            <div class="card-body">
-              <p class="card-text">ID: #id#</p>
-              <p class="card-text">City: #city#</p>
-              <p class="card-text">Contact: #phonenumber# - #email#</p>
+
+          <form action="company.cfm" method="post" format="flash">
+            <div class="form-group">
+              <label for="companyname">Name</label>
+              <input type="text" class="form-control" id="companyname" placeholder="Company name" value="#name#">
             </div>
-          </div>
-
-
-        <!--- ColdFusion Form --->
-        <form action="company.cfm" method="post" format="flash">
-
-          <p>
-            <label for="name">Name:</label><br>
-            <input type="text" name="name" id="name" required="yes" message="Please enter the company name." value="#name#">
-          </p>
-
-          <p>
-            <label for="city">City:</label><br>
-            <input type="text" name="city" id="city" required="yes" message="Please enter the city.">
-          </p>
-
-          <p>
-            <label for="status">Status:</label><br>
-            <select name="status" id="status" required="yes" message="Please select the status.">
-              <option value="">-- Select --</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </p>
-
-          <p>
-            <label for="email">Email:</label><br>
-            <input type="email" name="email" id="email" required="yes" message="Please enter a valid email.">
-          </p>
-
-          <p>
-            <label for="phonenumber">Phone Number:</label><br>
-            <input type="text" name="phonenumber" id="phonenumber" required="yes" pattern="\d{10}" message="Please enter a 10-digit phone number.">
-          </p>
-
-          <p>
-            <input type="submit" name="submit" value="Register Company">
-          </p>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" placeholder="city" value="#city#">
+            </div>
+            <div class="form-group">
+              <label for="companyname">Phone number</label>
+              <input type="text" class="form-control" id="phonenumber" placeholder="Phone number" value="#phonenumber#">
+            </div>
+            <div class="form-group">
+              <label for="city">email</label>
+              <input type="text" class="form-control" id="email" placeholder="email" value="#email#">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>
         </cfoutput>

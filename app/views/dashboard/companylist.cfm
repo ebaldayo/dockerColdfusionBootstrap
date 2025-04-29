@@ -27,15 +27,27 @@
                         <th scope="col">Name</th>
                         <th scope="col">City</th>
                         <th scope="col">Contact</th>
+                        <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <cfloop query="rstCompanies">
                         <tr>
                             <th scope="row">#id#</th>
-                            <td><a href="company.cfm?id=#id#">#name#</a></td>
+                            <td>
+                              <strong><a href="company.cfm?id=#id#">#name#</a></strong>
+                                <cfif status EQ 1>
+                                    <span class="badge bg-success">Active</span>
+                                <cfelse>
+                                    <span class="badge bg-danger">Inactive</span>
+                                </cfif>
+                            </td>
                             <td>#city#</td>
                             <td>#phonenumber# - #email#</td>
+                            <td>
+                                <a href="company.cfm?id=#id#" class="btn btn-primary">Edit</a>
+                                <a href="company.cfm?id=#id#" class="btn btn-danger">Delete</a>
+                            </td> 
                         </tr>
                         </cfloop>
                     </tbody>
@@ -43,10 +55,4 @@
         </cfoutput>
 
       </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<cfinclude template="../layouts/footer.cfm" >
