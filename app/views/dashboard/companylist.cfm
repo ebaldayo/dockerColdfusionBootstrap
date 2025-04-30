@@ -16,7 +16,7 @@
 
       <!-- Main Content -->
       <div class="col-md-10 p-4">
-        <h2>Companies</h2>
+        <h2>Companies</h2> <a href="company.cfm?id=0&action=new" class="btn btn-primary">New</a>
         <p>List of all active companies</p>
 
         <cfoutput>
@@ -35,7 +35,7 @@
                         <tr>
                             <th scope="row">#id#</th>
                             <td>
-                              <strong><a href="company.cfm?id=#id#">#name#</a></strong>
+                              <strong><a href="company.cfm?id=#id#&action=edit">#name#</a></strong>
                                 <cfif status EQ 1>
                                     <span class="badge bg-success">Active</span>
                                 <cfelse>

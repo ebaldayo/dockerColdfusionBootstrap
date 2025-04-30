@@ -3,61 +3,58 @@
 </cfif>
 <cfparam name="action" default="#url.action#"/>
 
-<cfif not structKeyExists(url, "id") or not isnumeric(URL.id) or URL.id EQ 0>
+<cfset companyService = createObject("component", "models.companyModel")>
+<cfset companyService.action = "#action#">
+
+
+<cfif not structKeyExists(url, "id") or not isnumeric(URL.id)>
   <cfset message = "Company ID is required or invalid.">
   <cfoutput>#message#</cfoutput>
   <cfabort>
 </cfif>
 
 <cfset id = URL.id>
+<cfset companyService.id = id>
 
 <cfswitch expression="#action#"> 
     <cfcase value="update">
-        <cftry>
-          <cfquery name="rstCompanies" datasource="ds_catering_app">
-            UPDATE companies
-            SET name = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.name#">,
-                city = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.city#">,
-                phonenumber = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.phonenumber#">,
-                email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.email#">
-            WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#id#">
-          </cfquery>
-          <cfcatch>
-            <cfset message = "Error updating company.">
-            <cfoutput>#message#</cfoutput>
-            <cfabort> 
-          </cfcatch>
-        </cftry>
+      <cfset companyData.id = id>
+      <cfset companyData.name = FORM.name>
+      <cfset companyData.city = FORM.city>
+      <cfset companyData.phonenumber = FORM.phonenumber>
+      <cfset companyData.email = FORM.email>
+
+      <cfset rstCompanies = companyService.updateCompany(companyData)>
     </cfcase> 
+
     <cfcase value="delete">
-        <cftry>
-          <cfquery name="rstCompanies" datasource="ds_catering_app">
-            DELETE FROM companies
-            WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#id#">
-          </cfquery>
-          <cfcatch>
-            <cfset message = "Error deleting company.">
-            <cfoutput>#message#</cfoutput>
-            <cfabort> 
-          </cfcatch>
-        </cftry>
+        <cfset rstCompanies = companyService.deleteCompanyById()> 
     </cfcase>
+    
     <cfcase value="insert">
+      <cfset newCompany.name = FORM.name>
+      <cfset newCompany.city = FORM.city>
+      <cfset newCompany.phonenumber = FORM.phonenumber>
+      <cfset newCompany.email = FORM.email>
+      <cfset companyService.insertCompany(newCompany)>
     </cfcase>
     <cfdefaultcase><!-- this include the GET -->
     </cfdefaultcase> 
 </cfswitch>
 
-<cfquery name="rstCompanies" datasource="ds_catering_app">
-  SELECT id, name, city, email, phonenumber, status
-  FROM companies
-  WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#id#">
-</cfquery>
+<cfif id EQ 0>
+  <cfset rstCompanies.id = 0>
+  <cfset rstCompanies.name = "">
+  <cfset rstCompanies.city = "">
+  <cfset rstCompanies.phonenumber = "">
+  <cfset rstCompanies.email = "">
+<cfelse>
+  <cfset rstCompanies = companyService.getCompanyById(id)>
+</cfif>
 
 <html lang="en">
 <cfinclude template="../layouts/head.cfm" >
 <body>
-
   <!-- Top Navigation Bar -->
   <cfinclude template="../layouts/top-navigation-bar.cfm" >
 
@@ -66,8 +63,8 @@
 
       <!-- Main Content -->
       <div class="col-md-10 p-4">
-        <cfoutput query="rstCompanies">
-           <h2>#name#</h2>
+        <cfoutput>
+           <h2>#rstCompanies.name#</h2>
           <p>Details</p>
 
           <cfif action EQ "confirmdelete">
@@ -79,23 +76,44 @@
                   </div>
                 <button type="submit" class="btn btn-primary">Delete it anyway</button>
               </form>
+          <cfelseif action EQ "new">
+                      <form action="company.cfm?id=#id#&action=insert" method="POST">
+              <div class="form-group">
+                <label for="companyname">Name</label>
+                <input type="text" class="form-control" id="companyname" name="name" placeholder="Company name" >
+              </div>
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="city">
+              </div>
+              <div class="form-group">
+                <label for="companyname">Phone number</label>
+                <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Phone number">
+              </div>
+              <div class="form-group">
+                <label for="city">email</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="email" >
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
           <cfelse>
             <form action="company.cfm?id=#id#&action=update" method="POST">
               <div class="form-group">
                 <label for="companyname">Name</label>
-                <input type="text" class="form-control" id="companyname" name="name" placeholder="Company name" value="#name#">
+                <input type="text" class="form-control" id="companyname" name="name" placeholder="Company name" value="#rstCompanies.name#">
               </div>
               <div class="form-group">
                 <label for="city">City</label>
-                <input type="text" class="form-control" id="city" name="city" placeholder="city" value="#city#">
+                <input type="text" class="form-control" id="city" name="city" placeholder="city" value="#rstCompanies.city#">
               </div>
               <div class="form-group">
                 <label for="companyname">Phone number</label>
-                <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Phone number" value="#phonenumber#">
+                <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Phone number" value="#rstCompanies.phonenumber#">
               </div>
               <div class="form-group">
                 <label for="city">email</label>
-                <input type="text" class="form-control" id="email" name="email" placeholder="email" value="#email#">
+                <input type="text" class="form-control" id="email" name="email" placeholder="email" value="#rstCompanies.email#">
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
