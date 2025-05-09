@@ -40,7 +40,7 @@
                         <td>#menu_name#</td>
                         <td>#dateTimeFormat(limit_hour, 'HH:nntt')#</td>
                         <td>
-                            <a href="company.cfm?id=#id_menu_day#&action=edit" class="btn btn-primary">Edit</a>
+                            <a href="menu_day.cfm?id=#id_menu_day#&action=edit" class="btn btn-primary">Edit</a>
                             <a href="company.cfm?id=#id_menu_day#&action=confirmdelete" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
