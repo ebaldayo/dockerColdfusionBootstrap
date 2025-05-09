@@ -13,11 +13,3 @@ CREATE TABLE menu_day_detail (
     meal VARCHAR(50) NOT NULL,
     meal_options VARCHAR(300) NULL
 );
-
-
-CREATE TABLE menu_day_detail (
-    id_menu_day_detail INT IDENTITY(1,1) PRIMARY KEY,
-    id_menu_day INT NOT NULL,
-    meal VARCHAR(50) NOT NULL,
-    meal_options VARCHAR(300) NULL
-);

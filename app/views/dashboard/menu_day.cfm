@@ -6,8 +6,13 @@
 <cfset menuService = createObject('component', 'models.menuDayModel')>
 <cfset menuService.action = '#action#'>
 
+<cfset menuDetailsService = createObject('component', 'models.menuDayDetailModel')>
+<cfset menuDetailsService.action = '#action#'>
+
 <cfset id = URL.id>
 <cfset menuService.id = id>
+
+<cfset qDetails = menuDetailsService.getByMenuDayId(id)>
 
 <html lang="en">
     <cfinclude template="../layouts/head.cfm">
@@ -22,6 +27,35 @@
             <div class="col-md-10 p-4">
                 <h1>Menu del dia</h1>
                 <p>Details</p>
+                  
+                <cfoutput>
+                    <div class="d-flex align-items-center mb-3">
+                        <h1 class="mb-0">Meals</h1>
+                        <a href="menuDayDetail.cfm?id=#id#&action=new" class="btn btn-success ms-3">Add Meal</a>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Meal</th>
+                            <th scope="col">Meal Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <cfloop query="qDetails">
+                            <tr>
+                                <td>
+                                <strong><a href="menuDayDetail.cfm?id=#id#&action=edit">#meal#</a></strong>
+                                </td>
+                                <td>#meal_options#</td>
+                                <td>
+                                    <a href="menuDayDetail.cfm?id=#id_menu_day#&action=edit" class="btn btn-primary">Edit</a>
+                                    <a href="menuDayDetail.cfm?id=#id_menu_day#&action=confirmdelete" class="btn btn-danger">Delete</a>
+                                </td> 
+                            </tr>
+                            </cfloop>
+                        </tbody>
+                    </table>
+                </cfoutput>
             </div>
         </div>
 
