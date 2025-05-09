@@ -23,8 +23,8 @@
             <cfquery datasource="ds_catering_app">
             UPDATE menu_day 
             SET menu_name = <cfqueryparam value="#data.menu_name#" cfsqltype="cf_sql_varchar">,
-                workday = <cfqueryparam value="#dateTimeFormat(data.workday, 'yyyy-MM-dd HH:nn:ss')#" cfsqltype="cf_sql_date">
-            WHERE id_menu_day = <cfqueryparam value="#data.id#" cfsqltype="cf_sql_integer">
+                workday = <cfqueryparam value="#data.workday#" cfsqltype="cf_sql_date">
+            WHERE id_menu_day = <cfqueryparam value="#data.id_menu_day#" cfsqltype="cf_sql_integer">
             </cfquery>
         <cfelse>
             <cfquery datasource="ds_catering_app">
