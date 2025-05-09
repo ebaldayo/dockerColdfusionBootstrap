@@ -12,27 +12,37 @@
 <cfset id = URL.id>
 <cfset menuService.id = id>
 
-<cfset qDetails = menuDetailsService.getByMenuDayId(id)>
-
 <cfif not structKeyExists(url, "id") or not isnumeric(URL.id)>
   <cfset message = "Menu ID is required or invalid.">
   <cfoutput>#message#</cfoutput>
   <cfabort>
 </cfif>
 
+<cfset qDetails = menuDetailsService.getByMenuDayId(id)>
+
 <cfif id EQ 0>
-  <cfset qGetById.menu_name = "">
-  <cfset qGetById.workday = "">
-  <cfset qGetById.day_status = 0>
+  <cfset menuData = {}>
+  <cfset menuData.menu_name = "">
+  <cfset menuData.workday = now()>
+  <cfset menuData.day_status = 0>
 <cfelse>
   <cfset qGetById = menuService.getById(id)>
+  <cfif qGetById.recordCount EQ 0>
+    <cfset message = "Menu not found">
+    <cfoutput>#message#</cfoutput>
+    <cfabort>
+  </cfif>
+  <cfset menuData = {}>
+  <cfset menuData.menu_name = qGetById.menu_name>
+  <cfset menuData.workday = qGetById.workday>
+  <cfset menuData.day_status = qGetById.day_status>
 </cfif>
 
 <cfswitch expression="#action#"> 
     <cfcase value="update">
-      <cfset menuData.id = id>
+      <cfset menuData.id_menu_day = id>
       <cfset menuData.menu_name = FORM.menu_name>
-      <cfset menuData.workday = FORM.workday>
+        <cfset menuData.workday = dateFormat(FORM.workday, 'yyyy-mm-dd')>
       <cfset qGetById = menuService.save(menuData)>
     </cfcase> 
     <cfdefaultcase>
@@ -53,13 +63,13 @@
                 <cfoutput>
                 <form action="menu_day.cfm?id=#id#&action=update" method="POST">
                     <div class="form-group pb-4">
-                        <label for="menudayname">Menu name</label>
-                        <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="Menu name" value="#qGetById.menu_name#">
+                        <label for="menu_name">Menu name</label>
+                        <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="Menu name" value="#menudata.menu_name#">
                     </div>
 
                     <div class="form-group pb-4">
-                        <label for="menudayname">Work day</label>
-                        <input type="text" class="form-control" id="workday" name="workday" placeholder="Work day" value="#qGetById.workday#">
+                        <label for="workday">Work day</label>
+                        <input type="text" class="form-control" id="workday" name="workday" placeholder="Work day" value="#menudata.workday#">
                     </div>
                    
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -81,7 +91,7 @@
                             <cfloop query="qDetails">
                             <tr>
                                 <td>
-                                <strong><a href="menuDayDetail.cfm?id=#id#&action=edit">#meal#</a></strong>
+                                <strong><a href="menuDayDetail.cfm?id=#id_menu_day#&action=edit">#meal#</a></strong>
                                 </td>
                                 <td>#meal_options#</td>
                                 <td>
