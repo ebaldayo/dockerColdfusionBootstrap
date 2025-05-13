@@ -24,9 +24,9 @@ const MenuSelectionForm = () => {
   useEffect(() => {
     const loadMenuData = async () => {
       try {
-        const data = await fetchMenuData();
+        const data = await fetchMenuData('13-05-2025');
         setMenuData(data);
-        
+
         // Process the menu details to separate the options
         if (data.menu_day_details && data.menu_day_details.length > 0) {
           const details = data.menu_day_details[0].map(detail => {
