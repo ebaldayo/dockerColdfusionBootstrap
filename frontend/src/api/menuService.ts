@@ -4,7 +4,6 @@ import { MenuResponse } from "../types/menu";
 export async function fetchMenuData(day: string): Promise<any> {
   try {
     
-    const response = await fetch(`http://localhost:8500/rest/v1/menu/13-05-2025`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
