@@ -7,9 +7,10 @@
     <cfreturn companyService.getAll()>
   </cffunction>
 
-  <!-- GET /api/company/{id} -->
-  <cffunction name="getOne" access="remote" returntype="any" httpmethod="GET" restPath="{id}">
+  <!-- GET /api/company/{id}/{day} -->
+  <cffunction name="getOne" access="remote" returntype="any" httpmethod="GET" restPath="{id}/{day}">
     <cfargument name="id" type="numeric" required="true">
+    <cfargument name="da" type="numeric" required="true">
     <cfreturn companyService.getById(arguments.id)>
   </cffunction>
 

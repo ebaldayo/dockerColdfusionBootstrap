@@ -16,12 +16,22 @@
         <cfreturn qGetById>
     </cffunction>
 
+    <cffunction name="getMenuByDay" access="public" returntype="query" output="false">
+        <cfargument name="day" type="string" required="true">
+
+        <cfquery name="rstMenuDay" datasource="ds_catering_app">
+           SELECT * FROM menu_day
+           WHERE workday = <cfqueryparam value="#arguments.day#" cfsqltype="cf_sql_varchar">
+        </cfquery>
+        <cfreturn rstMenuDay>
+    </cffunction>
+
     <cffunction name="save" access="public" returntype="void" output="false">
         <cfargument name="data" type="struct" required="true">
-        <cfdump  var="#data#">
+        <cfdump var="#data#">
         <cfif structKeyExists(arguments.data, 'id_menu_day')>
             <cfquery datasource="ds_catering_app">
-            UPDATE menu_day 
+            UPDATE menu_day
             SET menu_name = <cfqueryparam value="#data.menu_name#" cfsqltype="cf_sql_varchar">,
                 workday = <cfqueryparam value="#data.workday#" cfsqltype="cf_sql_date">
             WHERE id_menu_day = <cfqueryparam value="#data.id_menu_day#" cfsqltype="cf_sql_integer">
